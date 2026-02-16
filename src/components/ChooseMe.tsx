@@ -5,7 +5,7 @@ import {
     useGetAllPokemonsQuery,
     useLazyGetPokemonByNameQuery
 } from "../features/api/pokemonApi.ts";
-import {setError, setPokemon} from "../features/pokemon/pokemonSlice.ts";
+import {setError, setIsEvolution, setPokemon} from "../features/pokemon/pokemonSlice.ts";
 
 
 
@@ -39,10 +39,11 @@ const ChooseMe = () => {
             console.error('Error', e);
         }
         setPokemonName('')
+        dispatch(setIsEvolution(false));
     }
 
     return (
-        <div className={'mx-10 border-3 bg-orange-100/30 p-6 rounded-xl shadow-md'}>
+        <div className={'mx-10'}>
             <label className={'flex justify-center items-center py-6 font-serif text-xl'}>Choose a Pokemon:
                 <input
                     className={'bg-orange-200 rounded-md border-2 mx-4'}

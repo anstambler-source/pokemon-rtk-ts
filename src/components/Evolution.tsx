@@ -1,16 +1,14 @@
-import {useAppSelector} from "../hooks/hooks.ts";
+import {useAppDispatch, useAppSelector} from "../hooks/hooks.ts";
 import {useGetEvolutionPokemonQuery} from "../features/api/pokemonApi.ts";
 import {extractNamesPokemonsEvolution} from "../utils/extractNamesPokemonsEvolution.ts";
+import {setIsEvolution} from "../features/pokemon/pokemonSlice.ts";
 
-interface Props {
-    handleEvolution: () => void
-}
-
-function Evolution({handleEvolution} : Props) {
+function Evolution() {
     const speciesUrl = useAppSelector(state => state.pokemon.pokemonValue.speciesUrl)
     const {data, isLoading, error} = useGetEvolutionPokemonQuery(speciesUrl, {
         skip: !speciesUrl
     });
+    const dispatch = useAppDispatch();
 
     const names = data && extractNamesPokemonsEvolution(data)
 
@@ -21,7 +19,7 @@ function Evolution({handleEvolution} : Props) {
             <div>
                 {names?.map(name => <p key={name}>{name}</p>)}
             </div>
-            <button onClick={handleEvolution}>Back</button>
+            <button onClick={() => dispatch(setIsEvolution(false))}>Back</button>
         </div>
     ;
 }

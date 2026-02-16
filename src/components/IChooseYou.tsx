@@ -1,13 +1,11 @@
-import {useAppSelector} from "../hooks/hooks.ts";
-import {useState} from "react";
+import {useAppDispatch, useAppSelector} from "../hooks/hooks.ts";
 import Evolution from "./Evolution.tsx";
+import {setIsEvolution} from "../features/pokemon/pokemonSlice.ts";
 
 function IChooseYou() {
     const pokemon = useAppSelector(state => state.pokemon.pokemonValue)
-    const [isEvolution, setIsEvolution] = useState(false);
-    const handleEvolution = () => {
-        setIsEvolution(prevState => !prevState);
-    }
+    const isEvolution = useAppSelector(state => state.pokemon.isEvolution)
+    const dispatch = useAppDispatch()
 
     if(!isEvolution)
         return (
@@ -20,11 +18,11 @@ function IChooseYou() {
             </div>
             <div>
                 <img className={'w-full'} src={pokemon.imgLarge || pokemon.imgSmall} alt={pokemon.name}/>
-                <button onClick={handleEvolution}>Evolution</button>
+                <button onClick={() => dispatch(setIsEvolution(true))}>Evolution</button>
             </div>
         </div>
     )
-    return <Evolution handleEvolution={handleEvolution} />
+    return <Evolution />
 }
 
 export default IChooseYou;
