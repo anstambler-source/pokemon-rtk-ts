@@ -7,6 +7,7 @@ import type {
     pokemonInfoResponse,
     speciesResponse
 } from "../../utils/types";
+import {transformerResponse} from "../../utils/transformerResponse.ts";
 
 export const pokemonApi = createApi({
     reducerPath: 'pokemonApi',
@@ -15,16 +16,9 @@ export const pokemonApi = createApi({
         getPokemonByName: builder.query<pokemonInfo, string>({
             query: (name) => `pokemon/${name}`,
             keepUnusedDataFor: 60 * 60 * 24,
-            transformResponse: (data: pokemonInfoResponse) => ({
-                id: data.id,
-                name: data.name,
-                type: data.types[0].type.name,
-                height: data.height,
-                weight: data.weight,
-                imgSmall: data.sprites.front_default,
-                imgLarge: data.sprites.other.dream_world.front_default,
-                speciesUrl: data.species.url
-            })
+            transformResponse: (data: pokemonInfoResponse) => (
+                transformerResponse(data)
+            )
         }),
         getAllPokemons: builder.query<allPokemonsInfo, void>({
             query: () => 'pokemon?offset=0&limit=1350'
@@ -45,8 +39,21 @@ export const pokemonApi = createApi({
                     return {error: error as FetchBaseQueryError}
                 }
             }
+        }),
+        getImagesPokemonsEvolution: builder.query<pokemonInfo[], string[]>({
+            async queryFn(names, _queryApi, _extraOptions, fetchWithBQ) {
+                try {
+                    const results = await Promise.all(names.map(name => fetchWithBQ(`pokemon/${name}`)))
+                    const errors = results.find(r => r.error)
+                    if (errors && errors.error) return {error: errors.error}
+                    const data = results.map(r => transformerResponse(r.data as pokemonInfoResponse))
+                    return {data: data as pokemonInfo[]}
+                }catch (error){
+                    return {error: error as FetchBaseQueryError}
+                }
+            }
         })
     })
 })
 
-export const {useGetPokemonByNameQuery, useLazyGetPokemonByNameQuery, useGetAllPokemonsQuery, useGetEvolutionPokemonQuery} = pokemonApi
+export const {useGetPokemonByNameQuery, useLazyGetPokemonByNameQuery, useGetAllPokemonsQuery, useGetEvolutionPokemonQuery, useGetImagesPokemonsEvolutionQuery} = pokemonApi

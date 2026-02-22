@@ -22,6 +22,7 @@ export interface pokemonInfoResponse {
 }
 
 export interface pokemonInfo {
+    id: number;
     name: string;
     type: string;
     height: number;

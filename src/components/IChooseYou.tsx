@@ -16,9 +16,9 @@ function IChooseYou() {
                 <p>Height: {pokemon.height}</p>
                 <p>Weight: {pokemon.weight}</p>
             </div>
-            <div>
+            <div className={'flex flex-col items-center'}>
                 <img className={'w-full'} src={pokemon.imgLarge || pokemon.imgSmall} alt={pokemon.name}/>
-                <button onClick={() => dispatch(setIsEvolution(true))}>Evolution</button>
+                <button className={'mt-8 size-fit border-b-amber-800 rounded-xl bg-cyan-300 p-2 hover:bg-cyan-400 text-gray-900'} onClick={() => dispatch(setIsEvolution(true))}>Evolution</button>
             </div>
         </div>
     )

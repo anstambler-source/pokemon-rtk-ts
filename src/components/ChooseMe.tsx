@@ -6,15 +6,14 @@ import {
     useLazyGetPokemonByNameQuery
 } from "../features/api/pokemonApi.ts";
 import {setError, setIsEvolution, setPokemon} from "../features/pokemon/pokemonSlice.ts";
-
+import {bg_orange} from "../utils/constants.ts";
 
 
 const ChooseMe = () => {
     const [pokemonName, setPokemonName] = useState<string>('')
     const normalizedPokemonName = pokemonName.trim().toLowerCase();
     const dispatch = useAppDispatch();
-    const pokemon = useAppSelector(state => state.pokemon.pokemonValue)
-    const error = useAppSelector(state => state.pokemon.error)
+    const {pokemonValue : pokemon, error} = useAppSelector(state => state.pokemon);
     const [fetchPokemon, {isLoading}] = useLazyGetPokemonByNameQuery();
     const {data} = useGetAllPokemonsQuery();
     const pokemonFromCache = useAppSelector(pokemonApi.endpoints.getPokemonByName.select(normalizedPokemonName));
@@ -22,6 +21,8 @@ const ChooseMe = () => {
     async function handleSend() {
         if (pokemonFromCache.data) {
             dispatch(setPokemon(pokemonFromCache.data));
+            dispatch(setIsEvolution(false));
+            setPokemonName('')
             return;
         }
 
@@ -35,7 +36,7 @@ const ChooseMe = () => {
                 dispatch(setError(null));
                 dispatch(setPokemon(data))
             }
-        }catch(e){
+        } catch (e) {
             console.error('Error', e);
         }
         setPokemonName('')
@@ -44,28 +45,43 @@ const ChooseMe = () => {
 
     return (
         <div className={'mx-10'}>
-            <label className={'flex justify-center items-center py-6 font-serif text-xl'}>Choose a Pokemon:
-                <input
-                    className={'bg-orange-200 rounded-md border-2 mx-4'}
-                    value={pokemonName}
-                    onChange={(e) => setPokemonName(e.target.value.toUpperCase())}
-                />
-                <select
-                    className={'bg-orange-200 rounded-md border-2 mx-4'}
-                    onChange={(e) => setPokemonName(e.target.value)}
-                    value={pokemonName}>
-                    <option className={'bg-orange-200 rounded-md border-2 mx-4'}></option>
-                    {!!data && data.results.map((pokemon) =>
-                        <option className={'bg-orange-200 rounded-md border-2 mx-4'} key={pokemon.name}>{pokemon.name.toUpperCase()}</option>
-                    )}
-                </select>
-                <button className={'border-3 border-orange-400 rounded-lg bg-orange-200 p-2 hover:bg-orange-300 text-gray-900'} onClick={handleSend}>Send</button>
-            </label>
-            <div className={'text-center'}>
-                {isLoading && <p className={'text-3xl'}>Loading...</p>}
-                {error && <p className={'text-3xl p-6'}>{error}</p>}
+            <form onSubmit={(e) => {
+                e.preventDefault();
+                handleSend();
+            }}
+                  onKeyDown={(e) => {
+                      if (e.key === 'Enter' && e.target instanceof HTMLSelectElement) {
+                          e.preventDefault();
+                          handleSend();
+                      }
+                  }}>
+                <label className={'flex justify-center items-center py-6 font-serif text-xl'}>Choose a Pokemon:
+                    <input
+                        className={bg_orange}
+                        value={pokemonName}
+                        onChange={(e) => setPokemonName(e.target.value.toUpperCase())}
+                    />
+                    <select
+                        className={bg_orange}
+                        onChange={(e) => setPokemonName(e.target.value)}
+                        value={pokemonName}>
+                        <option className={bg_orange}></option>
+                        {!!data && data.results.map((pokemon) =>
+                            <option className={bg_orange}
+                                    key={pokemon.name}>{pokemon.name.toUpperCase()}</option>
+                        )}
+                    </select>
+                    <button className={'border-3 border-orange-400 rounded-lg bg-orange-200 p-2 hover:bg-orange-300 text-gray-900'}
+                        >Send
+                    </button>
+                </label>
+            </form>
+            <div className={'text-center text-3xl'}>
+                {isLoading && <p>Loading...</p>}
+                {error && <p className={'p-6'}>{error}</p>}
             </div>
-            {!pokemon.name && <img className={'w-1/2 object-contain mx-auto'} src='../../public/pokemonVopros.png' alt='Unknown Pokemon' />}
+            {!pokemon.name && <img className={'w-1/2 object-contain mx-auto'} src='../../public/pokemonVopros.png'
+                                   alt='Unknown Pokemon'/>}
         </div>
     )
 }
