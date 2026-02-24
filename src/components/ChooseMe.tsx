@@ -55,7 +55,8 @@ const ChooseMe = () => {
                           handleSend();
                       }
                   }}>
-                <label className={'flex justify-center items-center py-6 font-serif text-xl'}>Choose a Pokemon:
+                <div className={'flex justify-center items-center py-6 font-serif text-xl'}>
+                <label className={'text-red-600 bg-amber-200 rounded-lg p-2 opacity-80 font-semibold'}>Choose a Pokemon:</label>
                     <input
                         className={bg_orange}
                         value={pokemonName}
@@ -71,10 +72,10 @@ const ChooseMe = () => {
                                     key={pokemon.name}>{pokemon.name.toUpperCase()}</option>
                         )}
                     </select>
-                    <button className={'border-3 border-orange-400 rounded-lg bg-orange-200 p-2 hover:bg-orange-300 text-gray-900'}
+                    <button className={'border-2 opacity-80 rounded-lg bg-green-400 p-2 hover:bg-green-500 text-gray-900'}
                         >Send
                     </button>
-                </label>
+                </div>
             </form>
             <div className={'text-center text-3xl'}>
                 {isLoading && <p>Loading...</p>}
