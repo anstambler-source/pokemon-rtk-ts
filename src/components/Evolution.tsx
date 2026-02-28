@@ -39,7 +39,7 @@ function Evolution() {
                 {listPokemons?.map(pok => (
                     <div key={pok.name} className={'flex flex-col items-center'}>
                         <p className={'py-2 px-4 opacity-80 text-2xl bg-yellow-300 rounded-md w-fit text-center text-pink-600'}>{toCapitalize(pok.name)}</p>
-                        <img className={'cursor-pointer my-8 transition-transform duration-300 hover:scale-105'} onClick={() => handleChoise(pok)} src={pok.imgLarge || pok.imgSmall} alt={pok.name} />
+                        <img className={' cursor-pointer my-8 transition-transform duration-300 hover:scale-105'} onClick={() => handleChoise(pok)} src={pok.imgLarge || pok.imgSmall} alt={pok.name} />
                     </div>
                 ))}
             </div>
