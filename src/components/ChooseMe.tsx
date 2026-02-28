@@ -56,7 +56,7 @@ const ChooseMe = () => {
                       }
                   }}>
                 <div className={'flex justify-center items-center py-6 font-serif text-xl'}>
-                <label className={'text-red-600 bg-amber-200 rounded-lg p-2 opacity-80 font-semibold'}>Choose a Pokemon:</label>
+                <label className={'text-black bg-purple-300 rounded-lg p-2 opacity-80 font-semibold'}>Choose a Pokemon:</label>
                     <input
                         className={bg_orange}
                         value={pokemonName}

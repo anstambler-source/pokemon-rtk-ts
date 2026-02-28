@@ -8,6 +8,7 @@ import {toCapitalize} from "../utils/toCapitalize.ts";
 
 function Evolution() {
     const speciesUrl = useAppSelector(state => state.pokemon.pokemonValue.speciesUrl)
+    const pokemon = useAppSelector(state => state.pokemon.pokemonValue);
     const {data, isLoading, error} = useGetEvolutionPokemonQuery(speciesUrl, {
         skip: !speciesUrl
     });
@@ -18,9 +19,12 @@ function Evolution() {
         return extractNamesPokemonsEvolution(data)
     }, [data]);
 
-    const {data: pokEvo, isLoading: isLoa, error: err} = useGetImagesPokemonsEvolutionQuery(names || [], {
+    const {data: pokEvo, isLoading: isLoa, error: err} = useGetImagesPokemonsEvolutionQuery(names.filter(p => p !== pokemon.name) || [], {
         skip: !names?.length
     })
+
+    const listPokemons = pokEvo && [...pokEvo]
+    listPokemons?.splice(names.indexOf(pokemon.name), 0, pokemon)
 
     const handleChoise = (pok: pokemonInfo) => {
         dispatch(setPokemon(pok))
@@ -32,7 +36,7 @@ function Evolution() {
         if(data && names?.length)
       return  <div>
             <div className={'grid gap-1 mt-8'} style={{gridTemplateColumns: `repeat(${names.length}, 1fr)`}}>
-                {pokEvo?.map(pok => (
+                {listPokemons?.map(pok => (
                     <div key={pok.name} className={'flex flex-col items-center'}>
                         <p className={'py-2 px-4 opacity-80 text-2xl bg-yellow-300 rounded-md w-fit text-center text-pink-600'}>{toCapitalize(pok.name)}</p>
                         <img className={'cursor-pointer my-8 transition-transform duration-300 hover:scale-105'} onClick={() => handleChoise(pok)} src={pok.imgLarge || pok.imgSmall} alt={pok.name} />
