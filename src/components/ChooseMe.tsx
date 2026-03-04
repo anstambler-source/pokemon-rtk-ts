@@ -1,21 +1,29 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useAppDispatch, useAppSelector} from "../hooks/hooks.ts";
 import {
     pokemonApi,
     useGetAllPokemonsQuery,
     useLazyGetPokemonByNameQuery
 } from "../features/api/pokemonApi.ts";
-import {setError, setIsEvolution, setPokemon} from "../features/pokemon/pokemonSlice.ts";
-import {bg_orange} from "../utils/constants.ts";
+import {setAllPokemons, setError, setIsEvolution, setPokemon} from "../features/pokemon/pokemonSlice.ts";
+import {bg_orange, pages} from "../utils/constants.ts";
+import {useNavigate} from "react-router";
 
 
 const ChooseMe = () => {
     const [pokemonName, setPokemonName] = useState<string>('')
     const normalizedPokemonName = pokemonName.trim().toLowerCase();
     const dispatch = useAppDispatch();
-    const {pokemonValue : pokemon, error} = useAppSelector(state => state.pokemon);
+    const {pokemonValue: pokemon, error} = useAppSelector(state => state.pokemon);
     const [fetchPokemon, {isLoading}] = useLazyGetPokemonByNameQuery();
     const {data} = useGetAllPokemonsQuery();
+
+    useEffect(() => {
+        if (data) dispatch(setAllPokemons(data));
+    }, [data, dispatch])
+
+    const navigate = useNavigate()
+
     const pokemonFromCache = useAppSelector(pokemonApi.endpoints.getPokemonByName.select(normalizedPokemonName));
 
     async function handleSend() {
@@ -41,6 +49,7 @@ const ChooseMe = () => {
         }
         setPokemonName('')
         dispatch(setIsEvolution(false));
+        navigate(`${pages[1]}/${normalizedPokemonName}`);
     }
 
     return (
@@ -56,7 +65,8 @@ const ChooseMe = () => {
                       }
                   }}>
                 <div className={'flex justify-center items-center py-6 font-serif text-xl'}>
-                <label className={'text-black bg-purple-300 rounded-lg p-2 opacity-80 font-semibold'}>Choose a Pokemon:</label>
+                    <label className={'text-black bg-purple-300 rounded-lg p-2 opacity-80 font-semibold'}>Choose a
+                        Pokemon:</label>
                     <input
                         className={bg_orange}
                         value={pokemonName}
@@ -67,14 +77,15 @@ const ChooseMe = () => {
                         onChange={(e) => setPokemonName(e.target.value)}
                         value={pokemonName}>
                         <option className={bg_orange}></option>
-                        {!!data && data.results.map((pokemon) =>
+                        {!!data && data.map((pokemon) =>
                             <option className={bg_orange}
-                                    key={pokemon.name}>{pokemon.name.toUpperCase()}</option>
+                                    key={pokemon}>{pokemon.toUpperCase()}</option>
                         )}
                     </select>
-                    <button className={'border-2 opacity-80 rounded-lg bg-green-400 p-2 hover:bg-green-500 text-gray-900'}
+                    <button
+                            className={'border-2 opacity-80 rounded-lg bg-green-400 p-2 hover:bg-green-500 text-gray-900'}
                         >Send
-                    </button>
+                        </button>
                 </div>
             </form>
             <div className={'text-center text-3xl'}>

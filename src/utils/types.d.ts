@@ -56,25 +56,3 @@ export interface evolutionChain {
 export interface evolutionsResponse {
     chain: evolutionChain
 }
-
-export interface evolutionsResponse2 {
-    chain: {
-        species: {
-            name: string,
-        },
-        evolves_to: [
-            {
-                species?: {
-                    name: string,
-                },
-                evolves_to?: [
-                    {
-                        species?: {
-                            name: string,
-                        }
-                    }
-                ]
-            }
-        ]
-    }
-}

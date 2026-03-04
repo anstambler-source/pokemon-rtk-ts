@@ -5,6 +5,8 @@ import {setIsEvolution, setPokemon} from "../features/pokemon/pokemonSlice.ts";
 import type {pokemonInfo} from "../utils/types";
 import {useMemo} from "react";
 import {toCapitalize} from "../utils/toCapitalize.ts";
+import {useNavigate} from "react-router";
+import {pages} from "../utils/constants.ts";
 
 function Evolution() {
     const speciesUrl = useAppSelector(state => state.pokemon.pokemonValue.speciesUrl)
@@ -13,6 +15,7 @@ function Evolution() {
         skip: !speciesUrl
     });
     const dispatch = useAppDispatch();
+    const navigate = useNavigate()
 
     const names = useMemo(() => {
         if (!data) return [];
@@ -29,6 +32,7 @@ function Evolution() {
     const handleChoise = (pok: pokemonInfo) => {
         dispatch(setPokemon(pok))
         dispatch(setIsEvolution(false));
+        navigate(`/${pages[1]}/${pok.name}`)
     }
 
         if(isLoading || isLoa) return <p>Loading...</p>

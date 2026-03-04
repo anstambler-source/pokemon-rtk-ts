@@ -20,8 +20,9 @@ export const pokemonApi = createApi({
                 transformerResponse(data)
             )
         }),
-        getAllPokemons: builder.query<allPokemonsInfo, void>({
-            query: () => 'pokemon?offset=0&limit=1350'
+        getAllPokemons: builder.query<string[], void>({
+            query: () => 'pokemon?offset=0&limit=1350',
+            transformResponse: (data: allPokemonsInfo)=> data.results.map(d => d.name)
         }),
         getEvolutionPokemon: builder.query<evolutionsResponse, string>({
             async queryFn (url: string, _queryApi, _extraOptions, fetchWithBQ) {
