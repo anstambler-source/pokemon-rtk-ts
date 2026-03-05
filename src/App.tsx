@@ -5,13 +5,9 @@ import {useAppSelector} from "./hooks/hooks.ts";
 import {Route, Routes} from "react-router";
 import AboutPokemons from "./components/AboutPokemons.tsx";
 import {pages} from "./utils/constants.ts";
-import {useValidPokemon} from "./hooks/validPokemon.ts";
 
 function App() {
     const {name} = useAppSelector(state => state.pokemon.pokemonValue);
-    const {pokemonId, isValidPokemon} = useValidPokemon()
-    console.log(pokemonId);
-    console.log(isValidPokemon);
 
     return (
         <div

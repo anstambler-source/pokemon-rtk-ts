@@ -7,6 +7,7 @@ import {useMemo} from "react";
 import {toCapitalize} from "../utils/toCapitalize.ts";
 import {useNavigate} from "react-router";
 import {pages} from "../utils/constants.ts";
+import {useValidPokemon} from "../hooks/validPokemon.ts";
 
 function Evolution() {
     const speciesUrl = useAppSelector(state => state.pokemon.pokemonValue.speciesUrl)
@@ -16,6 +17,10 @@ function Evolution() {
     });
     const dispatch = useAppDispatch();
     const navigate = useNavigate()
+
+    const {pokemonId, isValidPokemon} = useValidPokemon()
+    console.log(pokemonId)
+    console.log(isValidPokemon)
 
     const names = useMemo(() => {
         if (!data) return [];

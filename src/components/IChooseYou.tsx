@@ -2,12 +2,17 @@ import {useAppDispatch, useAppSelector} from "../hooks/hooks.ts";
 import Evolution from "./Evolution.tsx";
 import {setIsEvolution} from "../features/pokemon/pokemonSlice.ts";
 import {toCapitalize} from "../utils/toCapitalize.ts";
+import {useValidPokemon} from "../hooks/validPokemon.ts";
 
 function IChooseYou() {
-    const pokemon = useAppSelector(state => state.pokemon.pokemonValue)
-    const isEvolution = useAppSelector(state => state.pokemon.isEvolution)
+    const {pokemonValue: pokemon, isEvolution, error} = useAppSelector(state => state.pokemon)
     const dispatch = useAppDispatch()
 
+    // const {pokemonId, isValidPokemon} = useValidPokemon()
+    // console.log(pokemonId)
+    // console.log(isValidPokemon)
+
+    if(!error) {
         if (!isEvolution)
             return (
                 <div className={'m-10 flex justify-center gap-20 items-center font-serif text-lg'}>
@@ -27,6 +32,7 @@ function IChooseYou() {
                 </div>
             )
         return <Evolution/>
+    }
 }
 
 export default IChooseYou;

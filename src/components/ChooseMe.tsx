@@ -8,6 +8,7 @@ import {
 import {setAllPokemons, setError, setIsEvolution, setPokemon} from "../features/pokemon/pokemonSlice.ts";
 import {bg_orange, pages} from "../utils/constants.ts";
 import {useNavigate} from "react-router";
+// import {useValidPokemon} from "../hooks/validPokemon.ts";
 
 
 const ChooseMe = () => {
@@ -21,6 +22,8 @@ const ChooseMe = () => {
     useEffect(() => {
         if (data) dispatch(setAllPokemons(data));
     }, [data, dispatch])
+
+    // const {pokemonId, isValidPokemon} = useValidPokemon()
 
     const navigate = useNavigate()
 
@@ -40,16 +43,17 @@ const ChooseMe = () => {
                 dispatch(setPokemon({}))
                 dispatch(setError('Pokemon not found'));
                 console.log('Wrong name of pokemon', error)
+                navigate(`/`);
             } else {
                 dispatch(setError(null));
                 dispatch(setPokemon(data))
+                navigate(`${pages[1]}/${normalizedPokemonName}`);
             }
         } catch (e) {
             console.error('Error', e);
         }
         setPokemonName('')
         dispatch(setIsEvolution(false));
-        navigate(`${pages[1]}/${normalizedPokemonName}`);
     }
 
     return (
