@@ -5,9 +5,10 @@ import {useAppSelector} from "./hooks/hooks.ts";
 import {Route, Routes} from "react-router";
 import AboutPokemons from "./components/AboutPokemons.tsx";
 import {pages} from "./utils/constants.ts";
+import Evolution from "./components/Evolution.tsx";
 
 function App() {
-    const {name} = useAppSelector(state => state.pokemon.pokemonValue);
+    const {name} = useAppSelector(state => state.pokemon.pokemonValue)
 
     return (
         <div
@@ -16,6 +17,7 @@ function App() {
             <Routes>
                 <Route path="/" element={<AboutPokemons/>} />
                 <Route path={`${pages[1]}/:pokemonId?`} element={<IChooseYou/>}/>)
+                <Route path={`${pages[2]}/:pokemonId?`} element={<Evolution/>}/>)
             </Routes>
         </div>
     )

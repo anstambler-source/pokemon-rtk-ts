@@ -1,14 +1,11 @@
 import {useEffect, useState} from "react";
 import {useAppDispatch, useAppSelector} from "../hooks/hooks.ts";
 import {
-    pokemonApi,
     useGetAllPokemonsQuery,
-    useLazyGetPokemonByNameQuery
 } from "../features/api/pokemonApi.ts";
-import {setAllPokemons, setError, setIsEvolution, setPokemon} from "../features/pokemon/pokemonSlice.ts";
+import {setAllPokemons} from "../features/pokemon/pokemonSlice.ts";
 import {bg_orange, pages} from "../utils/constants.ts";
 import {useNavigate} from "react-router";
-// import {useValidPokemon} from "../hooks/validPokemon.ts";
 
 
 const ChooseMe = () => {
@@ -16,44 +13,17 @@ const ChooseMe = () => {
     const normalizedPokemonName = pokemonName.trim().toLowerCase();
     const dispatch = useAppDispatch();
     const {pokemonValue: pokemon, error} = useAppSelector(state => state.pokemon);
-    const [fetchPokemon, {isLoading}] = useLazyGetPokemonByNameQuery();
     const {data} = useGetAllPokemonsQuery();
 
     useEffect(() => {
         if (data) dispatch(setAllPokemons(data));
     }, [data, dispatch])
 
-    // const {pokemonId, isValidPokemon} = useValidPokemon()
-
     const navigate = useNavigate()
 
-    const pokemonFromCache = useAppSelector(pokemonApi.endpoints.getPokemonByName.select(normalizedPokemonName));
-
-    async function handleSend() {
-        if (pokemonFromCache.data) {
-            dispatch(setPokemon(pokemonFromCache.data));
-            dispatch(setIsEvolution(false));
-            setPokemonName('')
-            return;
-        }
-
-        try {
-            const {data, error} = await fetchPokemon(normalizedPokemonName);
-            if (error) {
-                dispatch(setPokemon({}))
-                dispatch(setError('Pokemon not found'));
-                console.log('Wrong name of pokemon', error)
-                navigate(`/`);
-            } else {
-                dispatch(setError(null));
-                dispatch(setPokemon(data))
-                navigate(`${pages[1]}/${normalizedPokemonName}`);
-            }
-        } catch (e) {
-            console.error('Error', e);
-        }
+    function handleSend() {
         setPokemonName('')
-        dispatch(setIsEvolution(false));
+        navigate(`${pages[1]}/${normalizedPokemonName}`)
     }
 
     return (
@@ -92,12 +62,9 @@ const ChooseMe = () => {
                         </button>
                 </div>
             </form>
-            <div className={'text-center text-3xl'}>
-                {isLoading && <p>Loading...</p>}
-                {error && <p className={'p-6'}>{error}</p>}
-            </div>
-            {!pokemon.name && <img className={'w-1/2 object-contain mx-auto'} src='../../public/pokemonVopros.png'
-                                   alt='Unknown Pokemon'/>}
+            {error && <p className={'p-6 text-center text-3xl'}>{error}</p>}
+            {/*{!pokemon.name && <img className={'w-1/3 object-contain mx-auto'} src='../../public/pokemonVopros.png'*/}
+            {/*                       alt='Unknown Pokemon'/>}*/}
         </div>
     )
 }

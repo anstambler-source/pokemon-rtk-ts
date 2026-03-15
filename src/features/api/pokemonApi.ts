@@ -12,10 +12,10 @@ import {transformerResponse} from "../../utils/transformerResponse.ts";
 export const pokemonApi = createApi({
     reducerPath: 'pokemonApi',
     baseQuery: fetchBaseQuery({baseUrl: base_url}),
+    keepUnusedDataFor: 60 * 60 * 24,
     endpoints: builder => ({
         getPokemonByName: builder.query<pokemonInfo, string>({
             query: (name) => `pokemon/${name}`,
-            keepUnusedDataFor: 60 * 60 * 24,
             transformResponse: (data: pokemonInfoResponse) => (
                 transformerResponse(data)
             )
@@ -52,9 +52,9 @@ export const pokemonApi = createApi({
                 }catch (error){
                     return {error: error as FetchBaseQueryError}
                 }
-            }
+            },
         })
     })
 })
 
-export const {useGetPokemonByNameQuery, useLazyGetPokemonByNameQuery, useGetAllPokemonsQuery, useGetEvolutionPokemonQuery, useGetImagesPokemonsEvolutionQuery} = pokemonApi
+export const {useGetPokemonByNameQuery, useGetAllPokemonsQuery, useGetEvolutionPokemonQuery, useGetImagesPokemonsEvolutionQuery} = pokemonApi
