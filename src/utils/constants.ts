@@ -1,6 +1,6 @@
 export const base_url = 'https://pokeapi.co/api/v2/';
 export const bg_orange = 'bg-orange-200 rounded-md border-2 mx-4';
-export const pages = ['choise', 'pokemon', 'evolution']
+export const pages = ['pokemon', 'evolution']
 export const aboutPokemons = 'Pokémon is a Japanese media franchise consisting of video games, animated series and films, a trading card game, and other related media. The franchise takes place in a shared universe in which humans co-exist with creatures known as Pokémon, a large variety of species endowed with special powers. The franchise\'s primary target audience is children aged 5 to 12, but it is known to attract people of all ages. Pokémon is estimated to be the world\'s highest-grossing media franchise and is one of the best-selling video game franchises.\n' +
     '\n' +
     'The franchise originated as a pair of role-playing games developed by Game Freak, from an original concept by its founder, Satoshi Tajiri. Released on the Game Boy on 27 February 1996, the games became sleeper hits and were followed by manga series, a trading card game, and anime series and films. From 1998 to 2000, Pokémon was exported to the rest of the world, creating an unprecedented global phenomenon dubbed "Pokémania". By 2002, the craze had ended, after which Pokémon became a fixture in popular culture, with new products releasing to this day. In the summer of 2016, the franchise spawned a second craze with the release of Pokémon Go, an augmented reality game developed by Niantic.\n' +

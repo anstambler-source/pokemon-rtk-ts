@@ -1,23 +1,24 @@
 import './App.css'
 import ChooseMe from "./components/ChooseMe.tsx";
 import IChooseYou from "./components/IChooseYou.tsx";
-import {useAppSelector} from "./hooks/hooks.ts";
-import {Route, Routes} from "react-router";
+import {Route, Routes, useLocation} from "react-router";
 import AboutPokemons from "./components/AboutPokemons.tsx";
 import {pages} from "./utils/constants.ts";
 import Evolution from "./components/Evolution.tsx";
+import ErrorPage from "./components/ErrorPage.tsx";
 
 function App() {
-    const {name} = useAppSelector(state => state.pokemon.pokemonValue)
+    const location = useLocation()
 
     return (
         <div
-            className={`min-h-screen bg-fixed p-5 bg-cover ${!name ? ' bg-[url(../public/ImagePokemonPokeballFon.png)]' : ' bg-[url(../public/ImagePokemonsFon.png)]'} bg-white/60 bg-blend-lighten`}>
+            className={`min-h-screen bg-fixed p-5 bg-cover ${['/', '/*'].includes(location.pathname) ? ' bg-[url(../public/ImagePokemonPokeballFon.png)]' : ' bg-[url(../public/ImagePokemonsFon.png)]'} bg-white/60 bg-blend-lighten`}>
             <ChooseMe/>
             <Routes>
                 <Route path="/" element={<AboutPokemons/>} />
-                <Route path={`${pages[1]}/:pokemonId?`} element={<IChooseYou/>}/>)
-                <Route path={`${pages[2]}/:pokemonId?`} element={<Evolution/>}/>)
+                <Route path={`${pages[0]}/:pokemonId?`} element={<IChooseYou/>}/>)
+                <Route path={`${pages[1]}/:pokemonId?`} element={<Evolution/>}/>)
+                <Route path='*' element={<ErrorPage/>}/>)
             </Routes>
         </div>
     )

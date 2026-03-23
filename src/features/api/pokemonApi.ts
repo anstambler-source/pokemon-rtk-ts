@@ -15,7 +15,7 @@ export const pokemonApi = createApi({
     keepUnusedDataFor: 60 * 60 * 24,
     endpoints: builder => ({
         getPokemonByName: builder.query<pokemonInfo, string>({
-            query: (name) => `pokemon/${name}`,
+            query: (name) => `pokemon/${name || null}`,
             transformResponse: (data: pokemonInfoResponse) => (
                 transformerResponse(data)
             )
